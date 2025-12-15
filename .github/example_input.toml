@@ -1,0 +1,41 @@
+# Example TOML input for CoilOptimization
+
+schema_version = "0.1"
+
+[fluid]
+name = "water"
+inlet_temp_c = 20.0
+mass_flow_kg_s = 0.5
+# Optional numeric overrides:
+# viscosity_pa_s = 8.9e-4
+# density_kg_m3 = 998.0
+# specific_heat_j_kgk = 4182.0
+# thermal_conductivity_w_mk = 0.6
+
+[process]
+heat_duty_w = 5000.0
+inlet_temp_c = 20.0
+outlet_temp_c = 60.0
+
+[design_bounds]
+min_tube_od_m = 0.005
+max_tube_od_m = 0.02
+min_pitch_m = 0.001
+max_pitch_m = 0.05
+min_coil_diameter_m = 0.02
+max_coil_diameter_m = 1.0
+min_turns = 1
+max_turns = 500
+
+[constraints]
+max_pressure_drop_pa = 10000.0
+max_surface_temp_c = 150.0
+
+[objective]
+# options: "maximize_heat_transfer", "minimize_cost", or weighted
+type = "maximize_heat_transfer"
+weights = { heat = 1.0 }
+
+[solver]
+method = "SLSQP"
+maxiter = 500

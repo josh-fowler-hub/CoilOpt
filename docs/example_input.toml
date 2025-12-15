@@ -1,0 +1,58 @@
+# Example TOML input for CoilOptimization
+
+schema_version = "0.1"
+
+[fluid]
+name = "flue_gas"
+# Hot internal (flue gas) properties (example values)
+inlet_temp_c = 400.0
+mass_flow_kg_s = 0.5
+# The following numeric property fields are optional when 'name' is provided:
+# viscosity_pa_s = 3.5e-5
+# density_kg_m3 = 0.9
+# specific_heat_j_kgk = 1005.0
+# thermal_conductivity_w_mk = 0.03
+
+[external]
+# External (cold) water properties - either provide full properties or just a bath temperature
+temperature_c = 20.0
+mass_flow_kg_s = 0.5
+viscosity_pa_s = 8.9e-4
+density_kg_m3 = 998.0
+specific_heat_j_kgk = 4182.0
+thermal_conductivity_w_mk = 0.6
+
+[process]
+# process inlet/outlet refer to the HOT (flue gas) side
+heat_duty_w = 5000.0
+inlet_temp_c = 400.0
+outlet_temp_c = 200.0
+
+[design_bounds]
+min_tube_od_m = 0.005
+max_tube_od_m = 0.02
+min_pitch_m = 0.001
+max_pitch_m = 0.05
+min_coil_diameter_m = 0.02
+max_coil_diameter_m = 1.0
+min_turns = 1
+max_turns = 500
+min_wall_thickness_m = 0.001
+max_wall_thickness_m = 0.005
+
+[constraints]
+max_pressure_drop_pa = 10000.0
+max_surface_temp_c = 150.0
+
+[objective]
+# options: "maximize_heat_transfer", "minimize_cost", or weighted
+type = "maximize_heat_transfer"
+weights = { heat = 1.0 }
+
+[solver]
+method = "SLSQP"
+maxiter = 500
+
+[material]
+# Tube material thermal conductivity (e.g., steel~15 W/mK)
+k_w = 15.0
