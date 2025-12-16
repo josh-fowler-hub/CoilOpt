@@ -1,52 +1,52 @@
-schema_version = "0.1"                         # schema version of the TOML format
+schema_version = "0.1"                        # schema version of the TOML format
 
-[units]                                            # units of measurement
-length = "meters"                                # length unit (meters)
-temperature = "kelvin"                           # temperature unit (kelvin)
-pressure = "pascals"                             # pressure unit (pascals)
-mass = "kg"                                      # mass unit (kg)
-time = "seconds"                                 # time unit (seconds)
+[units]                                       # units of measurement
+length = "meters"                             # length unit (meters)
+temperature = "kelvin"                        # temperature unit (kelvin)
+pressure = "pascals"                          # pressure unit (pascals)
+mass = "kg"                                   # mass unit (kg)
+time = "seconds"                              # time unit (seconds)
 
-[internal]                                # hot side (flue gas)
-name = "flue_gas"                                # friendly name of material (informational)
-mass_flow = 0.05                         # mass flow rate of flue gas (kg/s), required for energy balance
-inlet_temp = 1366.0                            # inlet temperature of flue gas in K
-outlet_temp = 294.261                           # outlet temperature of flue gas in K
+[internal]                                    # hot side (flue gas)
+name = "flue_gas"                             # friendly name of material (informational)
+mass_flow = 0.05                              # mass flow rate of flue gas (kg/s), required for energy balance
+inlet_temp = 1366.0                           # inlet temperature of flue gas in K
+outlet_temp = 294.261                         # outlet temperature of flue gas in K
 
-[interface] # material properties of the heat exchanger tubes (solid)
+[interface]                                   # material properties of the heat exchanger tubes (solid)
 name = "steel"                                # friendly name of material (informational)
-wall_thickness = 0.0005                        # wall thickness of the tube (m)
 
-[external]                                         # cold side (water)
-name = "water"                                 # friendly name of fluid (informational)
-# Tbot = 294.261111                              # Bottom temperature in Kelvin
-# Ttop = 313.705556                        # Top temperature in Kelvin
+[external]                                    # cold side (water)
+name = "water"                                # friendly name of fluid (informational)
 Tinf_profile = "294.261111 + (313.705556 - 294.261111) * ((z - 0.00) / (1.672209 - 0.00))"            # Tinf temperature profile (°C)
 
 [coil]
-z_min = 0.00                       # Minimum x-coordinate for this zone, meters
-z_max = 1.672209                   # Maximum x-coordinate for this zone, meters
-coil_entry_height = 1.60                    # height of the coil entry (m)
-coil_exit_height = 0.000                     # height of the coil exit (m)
+z_min = 0.00
+z_max = 1.672209
+entry_height_m = 1.60                         # height of the coil entry (m)
+exit_height_m = 0.000                         # height of the coil exit (m)
+direction = "down"                            # optional: 'up' or 'down' (derived if omitted)
 
-[design_bounds]                                  # allowable ranges for design variables
+[design_bounds]                               # allowable ranges for design variables
 min_tube_od = 0.005                           # minimum tube outer diameter (m)
 max_tube_od = 0.02                            # maximum tube outer diameter (m)
 min_pitch = 0.001                             # minimum axial pitch between turns (m)
 max_pitch = 0.05                              # maximum axial pitch (m)
 min_coil_diameter = 0.02                      # minimum coil helix diameter (m)
 max_coil_diameter = 1.0                       # maximum coil helix diameter (m)
-min_turns = 1                                   # minimum number of turns (integer)
-max_turns = 500                                 # maximum number of turns (integer)
+min_turns = 1                                 # minimum number of turns (integer)
+max_turns = 500                               # maximum number of turns (integer)
+min_wall_thickness = 0.0005
+max_wall_thickness = 0.005
 
-[constraints]                                    # inequality constraints (user-specified limits)
-max_pressure_drop = 10000.0                  # maximum allowable pressure drop (Pa)
+[constraints]                                 # inequality constraints (user-specified limits)
+max_pressure_drop = 10000.0                   # maximum allowable pressure drop (Pa)
 max_surface_temp = 505.0                      # maximum allowable tube surface temperature (°C)
 
-[objective]                                      # objective specification
-type = "maximize_heat_transfer"                # objective type (only maximize_heat_transfer supported)
-weights = { heat = 1.0 }                         # per-term weights (heat is primary; other costs not supported)
+[objective]                                   # objective specification
+type = "maximize_heat_transfer"               # objective type (only maximize_heat_transfer supported)
+weights = { heat = 1.0 }                      # per-term weights (heat is primary; other costs not supported)
 
-[solver]                                         # solver options
-method = "SLSQP"                               # local solver method to use (SciPy: SLSQP/trust-constr)
-maxiter = 50                                    # maximum iterations for the local solver
+[solver]                                      # solver options
+method = "SLSQP"                              # local solver method to use (SciPy: SLSQP/trust-constr)
+maxiter = 50                                  # maximum iterations for the local solver

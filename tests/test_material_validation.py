@@ -43,7 +43,7 @@ maxiter = 10
     assert 'material.name' in ei.value.field
 
 
-def test_missing_material_wall_thickness_raises(tmp_path):
+def test_missing_material_wall_thickness_is_ok(tmp_path):
     toml = '''
 schema_version = "0.1"
 
@@ -76,8 +76,9 @@ weights = { heat = 1.0 }
 method = "SLSQP"
 maxiter = 10
 '''
-    p = tmp_path / 'bad2.toml'
+    p = tmp_path / 'ok.toml'
     p.write_text(toml)
-    with pytest.raises(config.ConfigError) as ei:
-        config.load_config(p)
-    assert 'material.wall_thickness' in ei.value.field
+    cfg = config.load_config(p)
+    # material name present and no wall_thickness provided is acceptable
+    assert cfg.material.get('name') == 'steel'
+    assert cfg.material.get('wall_thickness_m') is None or cfg.material.get('wall_thickness') is None

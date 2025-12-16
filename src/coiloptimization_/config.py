@@ -192,12 +192,10 @@ def validate_raw(raw: Dict[str, Any]) -> Config:
     if material is not None:
         if not isinstance(material, dict):
             raise ConfigError("material", "must be a table", "Use [material] or [interface] with appropriate keys")
-        # If the user supplied [interface], enforce name + wall_thickness
+        # If the user supplied [interface], enforce name only; wall thickness is a design bound
         if raw.get("interface") is not None:
             if material.get("name") is None:
                 raise ConfigError("material.name", "missing", "Provide a material name, e.g., name = \"steel\"")
-            if material.get("wall_thickness_m") is None and material.get("wall_thickness") is None:
-                raise ConfigError("material.wall_thickness", "missing", "Provide wall_thickness (will be normalized to meters)")
 
     # optional coil geometry: entry height and direction
     coil = raw.get("coil") if raw.get("coil") is not None else None
